@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReaganWords v1.1.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --accent-cyan: #00f5ff;
+            --accent-magenta: #ff00aa;
+            --accent-yellow: #ffee00;
+            --text-primary: #f0f0f5;
+            --text-muted: #6a6a7a;
+            --grid-line: rgba(255, 255, 255, 0.06);
+            --glow-cyan: 0 0 20px rgba(0, 245, 255, 0.4);
+            --glow-magenta: 0 0 20px rgba(255, 0, 170, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-cyan);
+            opacity: 0.15;
+            top: -100px;
+            right: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-magenta);
+            opacity: 0.12;
+            bottom: -50px;
+            left: -50px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .puzzle-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .grid-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            overflow: auto;
+            max-width: 100%;
+        }
+
+        .puzzle-grid {
+            display: grid;
+            gap: 2px;
+            user-select: none;
+        }
+
+        .cell {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .cell:hover {
+            background: rgba(0, 245, 255, 0.15);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .cell.selected {
+            background: rgba(0, 245, 255, 0.3);
+            color: var(--accent-cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .cell.found {
+            background: rgba(255, 0, 170, 0.25);
+            color: var(--accent-magenta);
+        }
+
+        .cell.found::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 2px solid var(--accent-magenta);
+            border-radius: 3px;
+            opacity: 0.5;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .size-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), #00c4cc);
+            color: var(--bg-dark);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-magenta);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .word-list {
+            list-style: none;
+        }
+
+        .word-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+        }
+
+        .word-item:last-child {
+            border-bottom: none;
+        }
+
+        .word-item.found {
+            color: var(--accent-magenta);
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .word-item::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .word-item.found::before {
+            background: var(--accent-magenta);
+            box-shadow: var(--glow-magenta);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .message {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--bg-card);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            box-shadow: var(--glow-cyan);
+            z-index: 100;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .message.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .message.success {
+            border-color: var(--accent-magenta);
+            box-shadow: var(--glow-magenta);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Dela Gothic One', cursive;
+            font-size: 3rem;
+            color: var(--accent-yellow);
+            text-shadow: 0 0 40px rgba(255, 238, 0, 0.5);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .celebration.show {
+            opacity: 1;
+            animation: celebrate 1s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--glow-cyan);
+        }
+
+        .modal-content h2 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            font-family: 'Dela Gothic One', cursive;
+        }
+
+        .modal-content p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .modal-content.wide {
+            max-width: 700px;
+        }
+
+        .changelog {
+            text-align: left;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .changelog h3 {
+            color: var(--accent-cyan);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .changelog h3:first-child {
+            margin-top: 0;
+        }
+
+        .changelog ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .changelog li {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .changelog .date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .changelog .type-feature {
+            color: var(--accent-cyan);
+        }
+
+        .changelog .type-fix {
+            color: var(--accent-magenta);
+        }
+
+        .changelog .type-change {
+            color: var(--accent-yellow);
+        }
+
+        .backup-info {
+            background: rgba(0, 245, 255, 0.05);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .backup-info strong {
+            color: var(--accent-yellow);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+
+        .preset-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .preset-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-select {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .difficulty-btn.active {
+            background: rgba(0, 245, 255, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .difficulty-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        @media print {
+            body::before,
+            .orb,
+            .sidebar .card:first-child,
+            .btn-group {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            .card {
+                background: white;
+                border: 1px solid #ddd;
+            }
+
+            .cell {
+                border: 1px solid #ccc;
+                background: white;
+                color: black;
+            }
+
+            .cell.found {
+                background: #eee;
+            }
+
+            .word-item {
+                color: black;
+            }
+
+            .word-item.found {
+                text-decoration: line-through;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Name Setup Modal -->
+    <div id="nameModal" class="modal">
+        <div class="modal-content">
+            <h2>🎮 Welcome!</h2>
+            <p>Please enter your name to get started:</p>
+            <input type="text" id="userName" placeholder="Enter your name" autocomplete="name" style="margin: 1rem 0;">
+            <div class="backup-info">
+                Your name will be used for backup files saved to:<br>
+                <strong>iCloud Drive/67Apps/Data/</strong>
+            </div>
+            <button class="btn" onclick="saveName()">Start Playing</button>
+        </div>
+    </div>
+
+    <!-- Changelog Modal -->
+    <div id="changelogModal" class="modal">
+        <div class="modal-content wide">
+            <h2>📋 Changelog</h2>
+            <div class="changelog">
+                <h3>Version 1.1.0 <span class="date">(February 2025)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Added user name setup on first use</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added backup data functionality with automatic filename generation</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added restore data functionality</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added settings option to change user name</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added version numbering and changelog</li>
+                    <li><span class="type-change">📝 Change:</span> Backup files now use format: YourName_WordSearch_Backup.json</li>
+                    <li><span class="type-change">📝 Change:</span> Added reminder to save backups to iCloud Drive/67Apps/Data/</li>
+                </ul>
+
+                <h3>Version 1.0.0 <span class="date">(Initial Release)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Interactive word search puzzle generator</li>
+                    <li><span class="type-feature">✨ Feature:</span> Customizable grid sizes (8×8 to 25×25)</li>
+                    <li><span class="type-feature">✨ Feature:</span> Three difficulty levels (Easy, Medium, Hard)</li>
+                    <li><span class="type-feature">✨ Feature:</span> Preset word themes (Animals, Colors, Space, Food, Sports)</li>
+                    <li><span class="type-feature">✨ Feature:</span> Custom word input</li>
+                    <li><span class="type-feature">✨ Feature:</span> Drag-to-select word finding</li>
+                    <li><span class="type-feature">✨ Feature:</span> Touch support for mobile devices</li>
+                    <li><span class="type-feature">✨ Feature:</span> Print-friendly formatting</li>
+                    <li><span class="type-feature">✨ Feature:</span> Completion celebration animation</li>
+                    <li><span class="type-feature">✨ Feature:</span> Progress tracking</li>
+                </ul>
+            </div>
+            <button class="btn" onclick="closeChangelog()" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1>ReaganWords</h1>
+            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v1.1.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
+        </header>
+
+        <div class="main-content">
+            <div class="puzzle-area card">
+                <div class="grid-container">
+                    <div class="puzzle-grid" id="puzzleGrid"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <div class="section-title">Configuration</div>
+                    
+                    <div class="input-group">
+                        <label>Grid Size</label>
+                        <div class="size-inputs">
+                            <input type="number" id="gridWidth" value="15" min="8" max="25" placeholder="Width">
+                            <input type="number" id="gridHeight" value="15" min="8" max="25" placeholder="Height">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Difficulty</label>
+                        <div class="difficulty-select">
+                            <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+                            <button class="difficulty-btn active" data-difficulty="medium">Medium</button>
+                            <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Word Presets</label>
+                        <div class="preset-group">
+                            <button class="btn btn-secondary preset-btn" data-preset="animals">Animals</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="colors">Colors</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="space">Space</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="food">Food</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="sports">Sports</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Custom Words (one per line)</label>
+                        <textarea id="wordInput" placeholder="PUZZLE&#10;SEARCH&#10;WORDS"></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="generateBtn">Generate</button>
+                        <button class="btn btn-secondary" id="printBtn">Print</button>
+                    </div>
+
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="backupData()">💾 Backup</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('restoreFile').click()">📂 Restore</button>
+                        <input type="file" id="restoreFile" class="file-input" accept=".json" onchange="restoreData(this)">
+                    </div>
+
+                    <div class="btn-group" style="margin-top: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="showSettings()" style="font-size: 0.75rem;">⚙️ Settings</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Find These Words</div>
+                    <ul class="word-list" id="wordList"></ul>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="foundCount">0</div>
+                            <div class="stat-label">Found</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="totalCount">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="message" id="message"></div>
+    <div class="celebration" id="celebration">🎉 Complete!</div>
+
+    <script>
+        // Word presets
+        const presets = {
+            animals: ['ELEPHANT', 'GIRAFFE', 'PENGUIN', 'DOLPHIN', 'TIGER', 'ZEBRA', 'KOALA', 'PANDA', 'LION', 'BEAR'],
+            colors: ['CRIMSON', 'AZURE', 'GOLDEN', 'VIOLET', 'EMERALD', 'CORAL', 'INDIGO', 'SCARLET', 'SILVER', 'AMBER'],
+            space: ['GALAXY', 'NEBULA', 'COMET', 'ASTEROID', 'PLANET', 'STELLAR', 'COSMIC', 'ORBIT', 'LUNAR', 'SOLAR'],
+            food: ['PIZZA', 'BURGER', 'SUSHI', 'PASTA', 'TACO', 'SALAD', 'STEAK', 'CURRY', 'RAMEN', 'BREAD'],
+            sports: ['SOCCER', 'TENNIS', 'HOCKEY', 'CRICKET', 'RUGBY', 'BOXING', 'GOLF', 'SURFING', 'SKIING', 'DIVING']
+        };
+
+        // Direction vectors based on difficulty
+        const directions = {
+            easy: [[0, 1], [1, 0]], // Right, Down only
+            medium: [[0, 1], [1, 0], [1, 1], [0, -1]], // + Diagonal, Left
+            hard: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]] // All 8 directions
+        };
+
+        let currentDifficulty = 'medium';
+        let grid = [];
+        let words = [];
+        let foundWords = new Set();
+        let selecting = false;
+        let selectedCells = [];
+        let startCell = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default words
+            document.getElementById('wordInput').value = presets.animals.join('\n');
+            generatePuzzle();
+
+            // Event listeners
+            document.getElementById('generateBtn').addEventListener('click', generatePuzzle);
+            document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+            // Preset buttons
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const preset = btn.dataset.preset;
+                    document.getElementById('wordInput').value = presets[preset].join('\n');
+                    generatePuzzle();
+                });
+            });
+
+            // Difficulty buttons
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentDifficulty = btn.dataset.difficulty;
+                    generatePuzzle();
+                });
+            });
+        });
+
+        function generatePuzzle() {
+            const width = parseInt(document.getElementById('gridWidth').value) || 15;
+            const height = parseInt(document.getElementById('gridHeight').value) || 15;
+            const wordText = document.getElementById('wordInput').value.trim();
+            
+            words = wordText.split('\n')
+                .map(w => w.trim().toUpperCase().replace(/[^A-Z]/g, ''))
+                .filter(w => w.length > 0 && w.length <= Math.max(width, height));
+
+            if (words.length === 0) {
+                showMessage('Please enter at least one word');
+                return;
+            }
+
+            // Sort words by length (longest first for better placement)
+            words.sort((a, b) => b.length - a.length);
+
+            // Initialize empty grid
+            grid = Array(height).fill(null).map(() => Array(width).fill(''));
+            foundWords = new Set();
+
+            // Place words
+            const placedWords = [];
+            const wordPositions = new Map();
+
+            for (const word of words) {
+                const placed = placeWord(word, width, height, wordPositions);
+                if (placed) {
+                    placedWords.push(word);
+                }
+            }
+
+            words = placedWords;
+
+            // Fill empty cells with random letters
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (grid[y][x] === '') {
+                        grid[y][x] = letters[Math.floor(Math.random() * 26)];
+                    }
+                }
+            }
+
+            renderGrid(width, height);
+            renderWordList();
+            updateStats();
+
+            if (words.length === 0) {
+                showMessage('Could not place any words. Try a larger grid.');
+            }
+        }
+
+        function placeWord(word, width, height, wordPositions) {
+            const dirs = directions[currentDifficulty];
+            const attempts = 100;
+
+            for (let i = 0; i < attempts; i++) {
+                const dir = dirs[Math.floor(Math.random() * dirs.length)];
+                const [dx, dy] = dir;
+
+                // Calculate valid starting positions
+                let startX, startY, endX, endY;
+                
+                if (dx > 0) {
+                    startX = 0;
+                    endX = width - word.length;
+                } else if (dx < 0) {
+                    startX = word.length - 1;
+                    endX = width - 1;
+                } else {
+                    startX = 0;
+                    endX = width - 1;
+                }
+
+                if (dy > 0) {
+                    startY = 0;
+                    endY = height - word.length;
+                } else if (dy < 0) {
+                    startY = word.length - 1;
+                    endY = height - 1;
+                } else {
+                    startY = 0;
+                    endY = height - 1;
+                }
+
+                if (endX < startX || endY < startY) continue;
+
+                const x = startX + Math.floor(Math.random() * (endX - startX + 1));
+                const y = startY + Math.floor(Math.random() * (endY - startY + 1));
+
+                if (canPlaceWord(word, x, y, dx, dy)) {
+                    const positions = [];
+                    for (let j = 0; j < word.length; j++) {
+                        const px = x + j * dx;
+                        const py = y + j * dy;
+                        grid[py][px] = word[j];
+                        positions.push({ x: px, y: py });
+                    }
+                    wordPositions.set(word, positions);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function canPlaceWord(word, x, y, dx, dy) {
+            for (let i = 0; i < word.length; i++) {
+                const px = x + i * dx;
+                const py = y + i * dy;
+
+                if (py < 0 || py >= grid.length || px < 0 || px >= grid[0].length) {
+                    return false;
+                }
+
+                const cell = grid[py][px];
+                if (cell !== '' && cell !== word[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function renderGrid(width, height) {
+            const gridEl = document.getElementById('puzzleGrid');
+            gridEl.style.gridTemplateColumns = `repeat(${width}, 36px)`;
+            gridEl.innerHTML = '';
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.textContent = grid[y][x];
+                    cell.dataset.x = x;
+                    cell.dataset.y = y;
+
+                    cell.addEventListener('mousedown', handleMouseDown);
+                    cell.addEventListener('mouseenter', handleMouseEnter);
+                    cell.addEventListener('mouseup', handleMouseUp);
+                    cell.addEventListener('touchstart', handleTouchStart, { passive: false });
+                    cell.addEventListener('touchmove', handleTouchMove, { passive: false });
+                    cell.addEventListener('touchend', handleTouchEnd);
+
+                    gridEl.appendChild(cell);
+                }
+            }
+
+            document.addEventListener('mouseup', handleMouseUp);
+        }
+
+        function handleMouseDown(e) {
+            e.preventDefault();
+            selecting = true;
+            startCell = { x: parseInt(e.target.dataset.x), y: parseInt(e.target.dataset.y) };
+            selectedCells = [startCell];
+            updateSelection();
+        }
+
+        function handleMouseEnter(e) {
+            if (!selecting) return;
+            const x = parseInt(e.target.dataset.x);
+            const y = parseInt(e.target.dataset.y);
+            updateSelectionLine(x, y);
+        }
+
+        function handleMouseUp() {
+            if (selecting) {
+                checkSelection();
+                selecting = false;
+                selectedCells = [];
+                startCell = null;
+                clearSelection();
+            }
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const cell = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (cell && cell.classList.contains('cell')) {
+                selecting = true;
+                startCell = { x: parseInt(cell.dataset.x), y: parseInt(cell.dataset.y) };
+                selectedCells = [startCell];
+                updateSelection();
+            }
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (!selecting) return;
+            const touch = e.touches[0];
+            const cell = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (cell && cell.classList.contains('cell')) {
+                const x = parseInt(cell.dataset.x);
+                const y = parseInt(cell.dataset.y);
+                updateSelectionLine(x, y);
+            }
+        }
+
+        function handleTouchEnd() {
+            if (selecting) {
+                checkSelection();
+                selecting = false;
+                selectedCells = [];
+                startCell = null;
+                clearSelection();
+            }
+        }
+
+        function updateSelectionLine(endX, endY) {
+            if (!startCell) return;
+
+            const dx = Math.sign(endX - startCell.x);
+            const dy = Math.sign(endY - startCell.y);
+
+            // Only allow straight lines (horizontal, vertical, diagonal)
+            if (dx !== 0 && dy !== 0 && Math.abs(endX - startCell.x) !== Math.abs(endY - startCell.y)) {
+                return;
+            }
+
+            selectedCells = [];
+            let x = startCell.x;
+            let y = startCell.y;
+
+            while (true) {
+                selectedCells.push({ x, y });
+                if (x === endX && y === endY) break;
+                x += dx;
+                y += dy;
+            }
+
+            updateSelection();
+        }
+
+        function updateSelection() {
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+
+            selectedCells.forEach(pos => {
+                const cell = document.querySelector(`.cell[data-x="${pos.x}"][data-y="${pos.y}"]`);
+                if (cell) cell.classList.add('selected');
+            });
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+        }
+
+        function checkSelection() {
+            if (selectedCells.length < 2) return;
+
+            const selectedWord = selectedCells.map(pos => grid[pos.y][pos.x]).join('');
+            const reversedWord = selectedWord.split('').reverse().join('');
+
+            let foundWord = null;
+            for (const word of words) {
+                if ((word === selectedWord || word === reversedWord) && !foundWords.has(word)) {
+                    foundWord = word;
+                    break;
+                }
+            }
+
+            if (foundWord) {
+                foundWords.add(foundWord);
+                markFound(selectedCells);
+                updateWordList(foundWord);
+                updateStats();
+                showMessage(`Found: ${foundWord}!`, 'success');
+
+                if (foundWords.size === words.length) {
+                    setTimeout(() => {
+                        document.getElementById('celebration').classList.add('show');
+                        setTimeout(() => {
+                            document.getElementById('celebration').classList.remove('show');
+                        }, 1500);
+                    }, 500);
+                }
+            }
+        }
+
+        function markFound(cells) {
+            cells.forEach(pos => {
+                const cell = document.querySelector(`.cell[data-x="${pos.x}"][data-y="${pos.y}"]`);
+                if (cell) cell.classList.add('found');
+            });
+        }
+
+        function renderWordList() {
+            const listEl = document.getElementById('wordList');
+            listEl.innerHTML = words.map(word => 
+                `<li class="word-item" data-word="${word}">${word}</li>`
+            ).join('');
+        }
+
+        function updateWordList(word) {
+            const item = document.querySelector(`.word-item[data-word="${word}"]`);
+            if (item) item.classList.add('found');
+        }
+
+        function updateStats() {
+            document.getElementById('foundCount').textContent = foundWords.size;
+            document.getElementById('totalCount').textContent = words.length;
+        }
+
+        function showMessage(text, type = '') {
+            const msgEl = document.getElementById('message');
+            msgEl.textContent = text;
+            msgEl.className = 'message show' + (type ? ` ${type}` : '');
+            setTimeout(() => {
+                msgEl.classList.remove('show');
+            }, 2000);
+        }
+
+        // Backup and Restore Functions
+        function checkUserName() {
+            const userName = localStorage.getItem('wordSearchUserName');
+            if (!userName) {
+                document.getElementById('nameModal').classList.add('active');
+                document.getElementById('userName').focus();
+            }
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('userName');
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            localStorage.setItem('wordSearchUserName', name);
+            document.getElementById('nameModal').classList.remove('active');
+            showMessage(`Welcome, ${name}!`, 'success');
+        }
+
+        function getUserFileName() {
+            const userName = localStorage.getItem('wordSearchUserName') || 'User';
+            return `${userName}_WordSearch_Backup.json`;
+        }
+
+        function backupData() {
+            const data = {
+                userName: localStorage.getItem('wordSearchUserName'),
+                customWords: document.getElementById('wordInput').value,
+                backupDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = getUserFileName();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showMessage('📁 Remember to save to: iCloud Drive/67Apps/Data/', 'success');
+        }
+
+        function restoreData(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.customWords) {
+                        document.getElementById('wordInput').value = data.customWords;
+                    }
+                    
+                    showMessage(`Backup restored successfully!`, 'success');
+                } catch (error) {
+                    alert('Error reading backup file. Please make sure it\'s a valid backup file.');
+                }
+            };
+            reader.readAsText(file);
+            input.value = ''; // Reset file input
+        }
+
+        function showSettings() {
+            const currentName = localStorage.getItem('wordSearchUserName') || 'Not set';
+            const action = prompt(`Settings Menu\n\nCurrent name: ${currentName}\n\nOptions:\n1 - Change name\n2 - View changelog\n\nEnter option number (or cancel):`);
+            
+            if (action === '1') {
+                const newName = prompt(`Enter new name:`);
+                if (newName && newName.trim()) {
+                    localStorage.setItem('wordSearchUserName', newName.trim());
+                    showMessage(`Name updated to: ${newName.trim()}`, 'success');
+                }
+            } else if (action === '2') {
+                showChangelog();
+            }
+        }
+
+        function showChangelog() {
+            document.getElementById('changelogModal').classList.add('active');
+        }
+
+        function closeChangelog() {
+            document.getElementById('changelogModal').classList.remove('active');
+        }
+
+        // Handle Enter key in name input
+        document.addEventListener('DOMContentLoaded', () => {
+            const userNameInput = document.getElementById('userName');
+            if (userNameInput) {
+                userNameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        saveName();
+                    }
+                });
+            }
+        });
+
+        // Check for user name on page load
+        window.addEventListener('load', checkUserName);
+    </script>
+
+</body>
+</html>
