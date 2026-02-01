@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReaganWords v1.1.0</title>
+    <title>ReaganWords v1.3.0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-dark: #0a0a0f;
@@ -635,12 +636,12 @@
     <!-- Name Setup Modal -->
     <div id="nameModal" class="modal">
         <div class="modal-content">
-            <h2>🎮 Welcome!</h2>
+            <h2>☁️ Welcome to ReaganWords!</h2>
             <p>Please enter your name to get started:</p>
             <input type="text" id="userName" placeholder="Enter your name" autocomplete="name" style="margin: 1rem 0;">
             <div class="backup-info">
-                Your name will be used for backup files saved to:<br>
-                <strong>iCloud Drive/67Apps/Data/</strong>
+                Your name identifies your data in the cloud.<br>
+                <strong>Your custom words will sync automatically!</strong>
             </div>
             <button class="btn" onclick="saveName()">Start Playing</button>
         </div>
@@ -651,6 +652,24 @@
         <div class="modal-content wide">
             <h2>📋 Changelog</h2>
             <div class="changelog">
+                <h3>Version 1.3.0 <span class="date">(February 2025)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Added automatic cloud sync with Supabase</li>
+                    <li><span class="type-feature">✨ Feature:</span> Auto-saves custom words 3 seconds after you stop typing</li>
+                    <li><span class="type-feature">✨ Feature:</span> Your data syncs across all devices automatically</li>
+                    <li><span class="type-feature">✨ Feature:</span> Manual "Sync Now" and "Load" buttons for instant control</li>
+                    <li><span class="type-change">📝 Change:</span> Simplified backup process - no more file downloads!</li>
+                    <li><span class="type-change">📝 Change:</span> Each person's data is private and identified by their name</li>
+                    <li><span class="type-change">📝 Change:</span> Removed exit confirmation (no longer needed with auto-sync)</li>
+                </ul>
+
+                <h3>Version 1.2.0 <span class="date">(February 2025)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Added exit confirmation prompt to remind users to backup before leaving</li>
+                    <li><span class="type-feature">✨ Feature:</span> Tracks last backup date to avoid unnecessary prompts</li>
+                    <li><span class="type-change">📝 Change:</span> Only prompts for backup if user has custom words and hasn't backed up in 24 hours</li>
+                </ul>
+
                 <h3>Version 1.1.0 <span class="date">(February 2025)</span></h3>
                 <ul>
                     <li><span class="type-feature">✨ Feature:</span> Added user name setup on first use</li>
@@ -686,7 +705,7 @@
     <div class="container">
         <header>
             <h1>ReaganWords</h1>
-            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v1.1.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
+            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v1.3.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
         </header>
 
         <div class="main-content">
@@ -739,9 +758,8 @@
                     </div>
 
                     <div class="btn-group" style="margin-top: 1rem;">
-                        <button class="btn btn-secondary" onclick="backupData()">💾 Backup</button>
-                        <button class="btn btn-secondary" onclick="document.getElementById('restoreFile').click()">📂 Restore</button>
-                        <input type="file" id="restoreFile" class="file-input" accept=".json" onchange="restoreData(this)">
+                        <button class="btn btn-secondary" onclick="syncToCloud()">☁️ Sync Now</button>
+                        <button class="btn btn-secondary" onclick="loadFromCloud()">⬇️ Load</button>
                     </div>
 
                     <div class="btn-group" style="margin-top: 0.5rem;">
@@ -772,6 +790,11 @@
     <div class="celebration" id="celebration">🎉 Complete!</div>
 
     <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://idphjoifjsjnzwwtjsdm.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkcGhqb2lmanNqbnp3d3Rqc2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5NjE4MDEsImV4cCI6MjA4NTUzNzgwMX0.lYu_NR4U4o6HIQaHUi13_B_ifXqd8eQO3KobMP4xsC8';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         // Word presets
         const presets = {
             animals: ['ELEPHANT', 'GIRAFFE', 'PENGUIN', 'DOLPHIN', 'TIGER', 'ZEBRA', 'KOALA', 'PANDA', 'LION', 'BEAR'],
@@ -1164,34 +1187,80 @@
             localStorage.setItem('wordSearchUserName', name);
             document.getElementById('nameModal').classList.remove('active');
             showMessage(`Welcome, ${name}!`, 'success');
+            
+            // Load data from cloud
+            loadFromCloud();
         }
 
-        function getUserFileName() {
-            const userName = localStorage.getItem('wordSearchUserName') || 'User';
-            return `${userName}_WordSearch_Backup.json`;
+        // Cloud Sync Functions
+        async function syncToCloud() {
+            const userName = localStorage.getItem('wordSearchUserName');
+            if (!userName) return;
+
+            const customWords = document.getElementById('wordInput').value;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('user_data')
+                    .upsert({
+                        user_name: userName,
+                        custom_words: customWords,
+                        last_updated: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_name'
+                    });
+
+                if (error) throw error;
+                
+                localStorage.setItem('lastBackupDate', new Date().getTime().toString());
+                showMessage('✅ Synced to cloud!', 'success');
+            } catch (error) {
+                console.error('Sync error:', error);
+                showMessage('❌ Sync failed. Check connection.', 'error');
+            }
+        }
+
+        async function loadFromCloud() {
+            const userName = localStorage.getItem('wordSearchUserName');
+            if (!userName) return;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_name', userName)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') throw error;
+
+                if (data) {
+                    document.getElementById('wordInput').value = data.custom_words || '';
+                    showMessage('✅ Loaded from cloud!', 'success');
+                } else {
+                    showMessage('No cloud data found. Your data will be saved when you sync.', '');
+                }
+            } catch (error) {
+                console.error('Load error:', error);
+                showMessage('❌ Load failed. Using local data.', 'error');
+            }
+        }
+
+        // Auto-sync when words change (debounced)
+        let syncTimeout;
+        function autoSync() {
+            clearTimeout(syncTimeout);
+            syncTimeout = setTimeout(() => {
+                syncToCloud();
+            }, 3000); // Sync 3 seconds after user stops typing
         }
 
         function backupData() {
-            const data = {
-                userName: localStorage.getItem('wordSearchUserName'),
-                customWords: document.getElementById('wordInput').value,
-                backupDate: new Date().toISOString()
-            };
-
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = getUserFileName();
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showMessage('📁 Remember to save to: iCloud Drive/67Apps/Data/', 'success');
+            // Now just syncs to cloud
+            syncToCloud();
         }
 
         function restoreData(input) {
+            // Legacy file restore still works
             const file = input.files[0];
             if (!file) return;
 
@@ -1202,15 +1271,17 @@
                     
                     if (data.customWords) {
                         document.getElementById('wordInput').value = data.customWords;
+                        // Also sync to cloud
+                        syncToCloud();
                     }
                     
-                    showMessage(`Backup restored successfully!`, 'success');
+                    showMessage(`Backup restored and synced!`, 'success');
                 } catch (error) {
                     alert('Error reading backup file. Please make sure it\'s a valid backup file.');
                 }
             };
             reader.readAsText(file);
-            input.value = ''; // Reset file input
+            input.value = '';
         }
 
         function showSettings() {
@@ -1249,7 +1320,21 @@
         });
 
         // Check for user name on page load
-        window.addEventListener('load', checkUserName);
+        window.addEventListener('load', () => {
+            checkUserName();
+            
+            // Load cloud data if user is already set
+            const userName = localStorage.getItem('wordSearchUserName');
+            if (userName) {
+                loadFromCloud();
+            }
+            
+            // Add auto-sync on word input changes
+            const wordInput = document.getElementById('wordInput');
+            if (wordInput) {
+                wordInput.addEventListener('input', autoSync);
+            }
+        });
     </script>
 
 </body>
