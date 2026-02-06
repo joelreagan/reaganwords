@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReaganWords v1.4.0</title>
+    <title>ReaganWords v1.5.0</title>
     
     <!-- App Icons -->
     <link rel="apple-touch-icon" href="RW-Icon-v2.png">
@@ -660,6 +660,15 @@
         <div class="modal-content wide">
             <h2>📋 Changelog</h2>
             <div class="changelog">
+                <h3>Version 1.5.0 <span class="date">(February 2025)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Expanded word lists to 60 words per theme</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added random word selection - different puzzles every time!</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added 5 new themes: Nature, Music, Technology, Movies, Countries</li>
+                    <li><span class="type-change">📝 Change:</span> Now truly unlimited - 10 themes with 60 words each = 600 total words</li>
+                    <li><span class="type-change">📝 Change:</span> Each preset click randomly selects 10 words from 60+ options</li>
+                </ul>
+
                 <h3>Version 1.4.0 <span class="date">(February 2025)</span></h3>
                 <ul>
                     <li><span class="type-feature">✨ Feature:</span> Added timer for each puzzle</li>
@@ -731,7 +740,7 @@
     <div class="container">
         <header>
             <h1>ReaganWords</h1>
-            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v1.4.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
+            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v1.5.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
         </header>
 
         <div class="main-content">
@@ -770,6 +779,11 @@
                             <button class="btn btn-secondary preset-btn" data-preset="space">Space</button>
                             <button class="btn btn-secondary preset-btn" data-preset="food">Food</button>
                             <button class="btn btn-secondary preset-btn" data-preset="sports">Sports</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="nature">Nature</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="music">Music</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="technology">Technology</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="movies">Movies</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="countries">Countries</button>
                         </div>
                     </div>
                 </div>
@@ -846,13 +860,68 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkcGhqb2lmanNqbnp3d3Rqc2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5NjE4MDEsImV4cCI6MjA4NTUzNzgwMX0.lYu_NR4U4o6HIQaHUi13_B_ifXqd8eQO3KobMP4xsC8';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Word presets
+        // Word presets - Expanded lists with 50+ words each
         const presets = {
-            animals: ['ELEPHANT', 'GIRAFFE', 'PENGUIN', 'DOLPHIN', 'TIGER', 'ZEBRA', 'KOALA', 'PANDA', 'LION', 'BEAR'],
-            colors: ['CRIMSON', 'AZURE', 'GOLDEN', 'VIOLET', 'EMERALD', 'CORAL', 'INDIGO', 'SCARLET', 'SILVER', 'AMBER'],
-            space: ['GALAXY', 'NEBULA', 'COMET', 'ASTEROID', 'PLANET', 'STELLAR', 'COSMIC', 'ORBIT', 'LUNAR', 'SOLAR'],
-            food: ['PIZZA', 'BURGER', 'SUSHI', 'PASTA', 'TACO', 'SALAD', 'STEAK', 'CURRY', 'RAMEN', 'BREAD'],
-            sports: ['SOCCER', 'TENNIS', 'HOCKEY', 'CRICKET', 'RUGBY', 'BOXING', 'GOLF', 'SURFING', 'SKIING', 'DIVING']
+            animals: ['ELEPHANT', 'GIRAFFE', 'PENGUIN', 'DOLPHIN', 'TIGER', 'ZEBRA', 'KOALA', 'PANDA', 'LION', 'BEAR', 
+                     'LEOPARD', 'CHEETAH', 'GORILLA', 'MONKEY', 'RHINO', 'HIPPO', 'WOLF', 'FOX', 'EAGLE', 'HAWK',
+                     'SHARK', 'WHALE', 'SEAL', 'OTTER', 'BUFFALO', 'MOOSE', 'DEER', 'RABBIT', 'SQUIRREL', 'RACCOON',
+                     'BEAVER', 'BADGER', 'LYNX', 'COUGAR', 'JAGUAR', 'PANTHER', 'HYENA', 'JACKAL', 'CAMEL', 'LLAMA',
+                     'ALPACA', 'BISON', 'ANTELOPE', 'GAZELLE', 'IMPALA', 'MEERKAT', 'MONGOOSE', 'WOMBAT', 'KANGAROO', 'WALLABY',
+                     'PLATYPUS', 'ECHIDNA', 'SLOTH', 'LEMUR', 'GIBBON', 'ORANGUTAN', 'CHIMP', 'BONOBO', 'BABOON', 'MANDRILL'],
+            colors: ['CRIMSON', 'AZURE', 'GOLDEN', 'VIOLET', 'EMERALD', 'CORAL', 'INDIGO', 'SCARLET', 'SILVER', 'AMBER',
+                    'BURGUNDY', 'NAVY', 'TEAL', 'OLIVE', 'MAROON', 'MAUVE', 'BEIGE', 'IVORY', 'CREAM', 'PEARL',
+                    'BRONZE', 'COPPER', 'PLATINUM', 'ROSE', 'RUBY', 'SAPPHIRE', 'TOPAZ', 'JADE', 'ONYX', 'OPAL',
+                    'MAGENTA', 'CYAN', 'LIME', 'MINT', 'SAGE', 'FOREST', 'PINE', 'MOSS', 'SEAFOAM', 'AQUA',
+                    'PERIWINKLE', 'LAVENDER', 'LILAC', 'PLUM', 'GRAPE', 'ORCHID', 'FUCHSIA', 'PINK', 'SALMON', 'PEACH',
+                    'APRICOT', 'TANGERINE', 'ORANGE', 'AMBER', 'GOLD', 'LEMON', 'BUTTER', 'VANILLA', 'SAND', 'TAN'],
+            space: ['GALAXY', 'NEBULA', 'COMET', 'ASTEROID', 'PLANET', 'STELLAR', 'COSMIC', 'ORBIT', 'LUNAR', 'SOLAR',
+                   'MARS', 'VENUS', 'JUPITER', 'SATURN', 'NEPTUNE', 'URANUS', 'MERCURY', 'PLUTO', 'METEOR', 'ECLIPSE',
+                   'SUPERNOVA', 'QUASAR', 'PULSAR', 'BLACKHOLE', 'WORMHOLE', 'COSMOS', 'UNIVERSE', 'VOID', 'STAR', 'NOVA',
+                   'DWARF', 'GIANT', 'CLUSTER', 'SPIRAL', 'ELLIPSE', 'GRAVITY', 'DARK', 'MATTER', 'ENERGY', 'PHOTON',
+                   'NEUTRON', 'PROTON', 'ELECTRON', 'QUANTUM', 'SPACE', 'TIME', 'DIMENSION', 'PARALLEL', 'ANTIMATTER', 'SINGULARITY',
+                   'HORIZON', 'RADIATION', 'GAMMA', 'XRAY', 'INFRARED', 'ULTRAVIOLET', 'SPECTRUM', 'LIGHT', 'VELOCITY', 'RELATIVITY'],
+            food: ['PIZZA', 'BURGER', 'SUSHI', 'PASTA', 'TACO', 'SALAD', 'STEAK', 'CURRY', 'RAMEN', 'BREAD',
+                  'SANDWICH', 'BURRITO', 'QUESADILLA', 'ENCHILADA', 'NACHOS', 'FAJITA', 'TAMALE', 'EMPANADA', 'AREPA', 'TORTILLA',
+                  'LASAGNA', 'RAVIOLI', 'GNOCCHI', 'RISOTTO', 'POLENTA', 'FOCACCIA', 'PANINI', 'BRUSCHETTA', 'TIRAMISU', 'GELATO',
+                  'TEMPURA', 'TERIYAKI', 'YAKITORI', 'UDON', 'SOBA', 'MISO', 'EDAMAME', 'TOFU', 'KIMCHI', 'BIBIMBAP',
+                  'POUTINE', 'CROISSANT', 'BAGUETTE', 'CREPE', 'SOUFFLE', 'QUICHE', 'RATATOUILLE', 'BOUILLABAISSE', 'COUSCOUS', 'FALAFEL',
+                  'HUMMUS', 'KEBAB', 'SHAWARMA', 'PAELLA', 'GAZPACHO', 'CHURRO', 'PIEROGI', 'GOULASH', 'SCHNITZEL', 'PRETZEL'],
+            sports: ['SOCCER', 'TENNIS', 'HOCKEY', 'CRICKET', 'RUGBY', 'BOXING', 'GOLF', 'SURFING', 'SKIING', 'DIVING',
+                    'BASKETBALL', 'BASEBALL', 'FOOTBALL', 'VOLLEYBALL', 'HANDBALL', 'SOFTBALL', 'LACROSSE', 'POLO', 'SQUASH', 'BADMINTON',
+                    'SWIMMING', 'CYCLING', 'RUNNING', 'MARATHON', 'SPRINT', 'HURDLES', 'RELAY', 'JAVELIN', 'DISCUS', 'SHOTPUT',
+                    'HAMMER', 'VAULT', 'HIGHUMP', 'LONGJUMP', 'TRIPLE', 'ARCHERY', 'FENCING', 'JUDO', 'KARATE', 'TAEKWONDO',
+                    'WRESTLING', 'SUMO', 'KICKBOXING', 'MUAYTHAI', 'ROWING', 'KAYAKING', 'CANOEING', 'SAILING', 'WINDSURFING', 'KITESURFING',
+                    'SKATEBOARD', 'SNOWBOARD', 'BOBSLED', 'LUGE', 'SKELETON', 'CURLING', 'BIATHLON', 'TRIATHLON', 'DECATHLON', 'PENTATHLON'],
+            nature: ['MOUNTAIN', 'OCEAN', 'RIVER', 'LAKE', 'FOREST', 'DESERT', 'JUNGLE', 'VALLEY', 'CANYON', 'CLIFF',
+                    'WATERFALL', 'GLACIER', 'VOLCANO', 'ISLAND', 'PENINSULA', 'PLATEAU', 'PRAIRIE', 'TUNDRA', 'SAVANNA', 'MARSH',
+                    'SWAMP', 'BAYOU', 'LAGOON', 'REEF', 'ATOLL', 'FJORD', 'DELTA', 'ESTUARY', 'BEACH', 'COAST',
+                    'SHORE', 'DUNE', 'OASIS', 'GEYSER', 'SPRING', 'CAVERN', 'GROTTO', 'MESA', 'BUTTE', 'RIDGE',
+                    'PEAK', 'SUMMIT', 'CREST', 'SLOPE', 'MEADOW', 'GLEN', 'GROVE', 'THICKET', 'WOODLAND', 'RAINFOREST',
+                    'TAIGA', 'STEPPE', 'WETLAND', 'MANGROVE', 'CORAL', 'KELP', 'SEAWEED', 'ALGAE', 'PLANKTON', 'ANEMONE'],
+            music: ['GUITAR', 'PIANO', 'DRUMS', 'VIOLIN', 'TRUMPET', 'SAXOPHONE', 'FLUTE', 'CLARINET', 'OBOE', 'BASSOON',
+                   'TROMBONE', 'TUBA', 'FRENCH', 'CELLO', 'VIOLA', 'BASS', 'HARP', 'BANJO', 'UKULELE', 'MANDOLIN',
+                   'ACCORDION', 'HARMONICA', 'BAGPIPE', 'ORGAN', 'SYNTH', 'KEYBOARD', 'XYLOPHONE', 'MARIMBA', 'TAMBOURINE', 'CYMBAL',
+                   'MELODY', 'HARMONY', 'RHYTHM', 'TEMPO', 'BEAT', 'CHORD', 'NOTE', 'SCALE', 'OCTAVE', 'PITCH',
+                   'TONE', 'TIMBRE', 'DYNAMICS', 'CRESCENDO', 'FORTE', 'PIANO', 'ALLEGRO', 'ADAGIO', 'SYMPHONY', 'CONCERTO',
+                   'SONATA', 'OPERA', 'ARIA', 'OVERTURE', 'PRELUDE', 'FUGUE', 'ETUDE', 'NOCTURNE', 'WALTZ', 'JAZZ'],
+            technology: ['COMPUTER', 'LAPTOP', 'TABLET', 'PHONE', 'KEYBOARD', 'MOUSE', 'MONITOR', 'PRINTER', 'SCANNER', 'ROUTER',
+                        'MODEM', 'WIFI', 'BLUETOOTH', 'USB', 'HDMI', 'ETHERNET', 'CABLE', 'CHARGER', 'BATTERY', 'PROCESSOR',
+                        'MEMORY', 'STORAGE', 'DRIVE', 'DISK', 'CLOUD', 'SERVER', 'DATABASE', 'SOFTWARE', 'HARDWARE', 'FIRMWARE',
+                        'OPERATING', 'SYSTEM', 'PROGRAM', 'APPLICATION', 'BROWSER', 'SEARCH', 'ENGINE', 'WEBSITE', 'EMAIL', 'INTERNET',
+                        'NETWORK', 'FIREWALL', 'ANTIVIRUS', 'MALWARE', 'HACKER', 'ENCRYPTION', 'PASSWORD', 'SECURITY', 'PRIVACY', 'BACKUP',
+                        'ALGORITHM', 'CODE', 'BINARY', 'DATA', 'DIGITAL', 'ANALOG', 'CIRCUIT', 'CHIP', 'SILICON', 'QUANTUM'],
+            movies: ['ACTION', 'COMEDY', 'DRAMA', 'THRILLER', 'HORROR', 'ROMANCE', 'SCIFI', 'FANTASY', 'ADVENTURE', 'MYSTERY',
+                    'WESTERN', 'MUSICAL', 'ANIMATION', 'DOCUMENTARY', 'BIOGRAPHY', 'HISTORICAL', 'CRIME', 'NOIR', 'SUPERHERO', 'MONSTER',
+                    'DIRECTOR', 'ACTOR', 'ACTRESS', 'PRODUCER', 'WRITER', 'SCREENPLAY', 'SCRIPT', 'DIALOGUE', 'MONOLOGUE', 'SCENE',
+                    'SHOT', 'FRAME', 'CAMERA', 'LIGHTING', 'SOUND', 'MUSIC', 'SCORE', 'SOUNDTRACK', 'EFFECTS', 'SPECIAL',
+                    'VISUAL', 'EDITING', 'MONTAGE', 'SEQUENCE', 'OPENING', 'ENDING', 'CREDITS', 'TRAILER', 'PREMIERE', 'OSCAR',
+                    'AWARD', 'FESTIVAL', 'CANNES', 'SUNDANCE', 'VENICE', 'BERLIN', 'TORONTO', 'TRIBECA', 'SCREENPLAY', 'CASTING'],
+            countries: ['AMERICA', 'CANADA', 'MEXICO', 'BRAZIL', 'ARGENTINA', 'CHILE', 'PERU', 'COLOMBIA', 'VENEZUELA', 'ECUADOR',
+                       'ENGLAND', 'FRANCE', 'GERMANY', 'ITALY', 'SPAIN', 'PORTUGAL', 'GREECE', 'TURKEY', 'RUSSIA', 'POLAND',
+                       'SWEDEN', 'NORWAY', 'DENMARK', 'FINLAND', 'ICELAND', 'IRELAND', 'SCOTLAND', 'WALES', 'BELGIUM', 'NETHERLANDS',
+                       'AUSTRIA', 'SWITZERLAND', 'CZECH', 'HUNGARY', 'ROMANIA', 'BULGARIA', 'UKRAINE', 'CROATIA', 'SERBIA', 'ALBANIA',
+                       'CHINA', 'JAPAN', 'KOREA', 'INDIA', 'THAILAND', 'VIETNAM', 'MALAYSIA', 'INDONESIA', 'PHILIPPINES', 'SINGAPORE',
+                       'AUSTRALIA', 'ZEALAND', 'FIJI', 'SAMOA', 'TONGA', 'EGYPT', 'MOROCCO', 'KENYA', 'ETHIOPIA', 'NIGERIA']
         };
 
         // Direction vectors based on difficulty
@@ -876,10 +945,16 @@
         let startTime = null;
         let elapsedSeconds = 0;
 
+        // Helper function to randomly select words from a preset
+        function getRandomWords(wordArray, count = 10) {
+            const shuffled = [...wordArray].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            // Set default words
-            document.getElementById('wordInput').value = presets.animals.join('\n');
+            // Set default words (random selection from animals)
+            document.getElementById('wordInput').value = getRandomWords(presets.animals).join('\n');
             generatePuzzle();
 
             // Event listeners
@@ -890,7 +965,7 @@
             document.querySelectorAll('.preset-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const preset = btn.dataset.preset;
-                    document.getElementById('wordInput').value = presets[preset].join('\n');
+                    document.getElementById('wordInput').value = getRandomWords(presets[preset]).join('\n');
                     generatePuzzle();
                 });
             });
