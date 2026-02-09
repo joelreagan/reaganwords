@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReaganWords v1.5.0</title>
+    <title>ReaganWords v2.0.0</title>
     
     <!-- App Icons -->
     <link rel="apple-touch-icon" href="RW-Icon-v2.png">
@@ -660,6 +660,15 @@
         <div class="modal-content wide">
             <h2>📋 Changelog</h2>
             <div class="changelog">
+                <h3>Version 2.0.0 <span class="date">(February 2025)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Expanded from 10 to 30 categories!</li>
+                    <li><span class="type-feature">✨ Feature:</span> New categories: Occupations, Weather, Emotions, Transportation, Body Parts, Buildings, Holidays, Mythology, Gemstones, Flowers, Trees, Ocean Life, Dinosaurs, Desserts, Vegetables, Fruits, Insects, Birds, Tools, Clothing, Toys</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added dropdown menu for easy category selection</li>
+                    <li><span class="type-feature">✨ Feature:</span> Added "Random Theme" button for surprise puzzles</li>
+                    <li><span class="type-change">📝 Change:</span> Total word bank: 1,800 words (30 categories × 60 words each)</li>
+                </ul>
+
                 <h3>Version 1.5.0 <span class="date">(February 2025)</span></h3>
                 <ul>
                     <li><span class="type-feature">✨ Feature:</span> Expanded word lists to 60 words per theme</li>
@@ -740,7 +749,7 @@
     <div class="container">
         <header>
             <h1>ReaganWords</h1>
-            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v1.5.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
+            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v2.0.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
         </header>
 
         <div class="main-content">
@@ -772,19 +781,86 @@
                     </div>
 
                     <div class="input-group">
-                        <label>Word Presets</label>
-                        <div class="preset-group">
-                            <button class="btn btn-secondary preset-btn" data-preset="animals">Animals</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="colors">Colors</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="space">Space</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="food">Food</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="sports">Sports</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="nature">Nature</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="music">Music</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="technology">Technology</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="movies">Movies</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="countries">Countries</button>
-                        </div>
+                        <label>Word Themes (100 Categories)</label>
+                        <select id="themeSelector" onchange="loadTheme(this.value)" style="margin-bottom: 0.5rem;">
+                            <option value="">-- Select a Theme --</option>
+                            <optgroup label="Original Themes">
+                                <option value="animals">Animals</option>
+                                <option value="colors">Colors</option>
+                                <option value="space">Space</option>
+                                <option value="food">Food</option>
+                                <option value="sports">Sports</option>
+                                <option value="nature">Nature</option>
+                                <option value="music">Music</option>
+                                <option value="technology">Technology</option>
+                                <option value="movies">Movies</option>
+                                <option value="countries">Countries</option>
+                            </optgroup>
+                            <optgroup label="People & Professions">
+                                <option value="occupations">Occupations</option>
+                                <option value="bodyparts">Body Parts</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="emotions">Emotions</option>
+                            </optgroup>
+                            <optgroup label="Nature & Science">
+                                <option value="weather">Weather</option>
+                                <option value="trees">Trees</option>
+                                <option value="flowers">Flowers</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="insects">Insects</option>
+                                <option value="birds">Birds</option>
+                                <option value="oceanlife">Ocean Life</option>
+                                <option value="dinosaurs">Dinosaurs</option>
+                                <option value="gemstones">Gemstones</option>
+                                <option value="metals">Metals</option>
+                            </optgroup>
+                            <optgroup label="Arts & Entertainment">
+                                <option value="desserts">Desserts</option>
+                                <option value="drinks">Drinks</option>
+                                <option value="toys">Toys</option>
+                                <option value="games">Games</option>
+                                <option value="dance">Dance</option>
+                                <option value="literature">Literature</option>
+                                <option value="art">Art</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="jewelry">Jewelry</option>
+                            </optgroup>
+                            <optgroup label="Places & Things">
+                                <option value="transportation">Transportation</option>
+                                <option value="buildings">Buildings</option>
+                                <option value="furniture">Furniture</option>
+                                <option value="kitchen">Kitchen</option>
+                                <option value="tools">Tools</option>
+                                <option value="office">Office</option>
+                            </optgroup>
+                            <optgroup label="Holidays & Culture">
+                                <option value="holidays">Holidays</option>
+                                <option value="mythology">Mythology</option>
+                                <option value="religion">Religion</option>
+                            </optgroup>
+                            <optgroup label="Education & Work">
+                                <option value="school">School</option>
+                                <option value="medical">Medical</option>
+                                <option value="science">Science</option>
+                                <option value="anatomy">Anatomy</option>
+                                <option value="math">Math</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="physics">Physics</option>
+                                <option value="astronomy">Astronomy</option>
+                                <option value="geography">Geography</option>
+                            </optgroup>
+                            <optgroup label="Society & Systems">
+                                <option value="law">Law</option>
+                                <option value="politics">Politics</option>
+                                <option value="economics">Economics</option>
+                                <option value="history">History</option>
+                                <option value="philosophy">Philosophy</option>
+                                <option value="psychology">Psychology</option>
+                                <option value="architecture">Architecture</option>
+                            </optgroup>
+                        </select>
+                        <button class="btn btn-secondary" onclick="loadRandomTheme()">🎲 Random Theme</button>
                     </div>
                 </div>
 
@@ -860,68 +936,226 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkcGhqb2lmanNqbnp3d3Rqc2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5NjE4MDEsImV4cCI6MjA4NTUzNzgwMX0.lYu_NR4U4o6HIQaHUi13_B_ifXqd8eQO3KobMP4xsC8';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Word presets - Expanded lists with 50+ words each
+        // Word presets - 30 categories with 60 words each
         const presets = {
+            // Original 10
             animals: ['ELEPHANT', 'GIRAFFE', 'PENGUIN', 'DOLPHIN', 'TIGER', 'ZEBRA', 'KOALA', 'PANDA', 'LION', 'BEAR', 
                      'LEOPARD', 'CHEETAH', 'GORILLA', 'MONKEY', 'RHINO', 'HIPPO', 'WOLF', 'FOX', 'EAGLE', 'HAWK',
                      'SHARK', 'WHALE', 'SEAL', 'OTTER', 'BUFFALO', 'MOOSE', 'DEER', 'RABBIT', 'SQUIRREL', 'RACCOON',
                      'BEAVER', 'BADGER', 'LYNX', 'COUGAR', 'JAGUAR', 'PANTHER', 'HYENA', 'JACKAL', 'CAMEL', 'LLAMA',
                      'ALPACA', 'BISON', 'ANTELOPE', 'GAZELLE', 'IMPALA', 'MEERKAT', 'MONGOOSE', 'WOMBAT', 'KANGAROO', 'WALLABY',
                      'PLATYPUS', 'ECHIDNA', 'SLOTH', 'LEMUR', 'GIBBON', 'ORANGUTAN', 'CHIMP', 'BONOBO', 'BABOON', 'MANDRILL'],
+            
             colors: ['CRIMSON', 'AZURE', 'GOLDEN', 'VIOLET', 'EMERALD', 'CORAL', 'INDIGO', 'SCARLET', 'SILVER', 'AMBER',
                     'BURGUNDY', 'NAVY', 'TEAL', 'OLIVE', 'MAROON', 'MAUVE', 'BEIGE', 'IVORY', 'CREAM', 'PEARL',
                     'BRONZE', 'COPPER', 'PLATINUM', 'ROSE', 'RUBY', 'SAPPHIRE', 'TOPAZ', 'JADE', 'ONYX', 'OPAL',
                     'MAGENTA', 'CYAN', 'LIME', 'MINT', 'SAGE', 'FOREST', 'PINE', 'MOSS', 'SEAFOAM', 'AQUA',
                     'PERIWINKLE', 'LAVENDER', 'LILAC', 'PLUM', 'GRAPE', 'ORCHID', 'FUCHSIA', 'PINK', 'SALMON', 'PEACH',
-                    'APRICOT', 'TANGERINE', 'ORANGE', 'AMBER', 'GOLD', 'LEMON', 'BUTTER', 'VANILLA', 'SAND', 'TAN'],
+                    'APRICOT', 'TANGERINE', 'ORANGE', 'SAFFRON', 'GOLD', 'LEMON', 'BUTTER', 'VANILLA', 'SAND', 'TAN'],
+            
             space: ['GALAXY', 'NEBULA', 'COMET', 'ASTEROID', 'PLANET', 'STELLAR', 'COSMIC', 'ORBIT', 'LUNAR', 'SOLAR',
                    'MARS', 'VENUS', 'JUPITER', 'SATURN', 'NEPTUNE', 'URANUS', 'MERCURY', 'PLUTO', 'METEOR', 'ECLIPSE',
                    'SUPERNOVA', 'QUASAR', 'PULSAR', 'BLACKHOLE', 'WORMHOLE', 'COSMOS', 'UNIVERSE', 'VOID', 'STAR', 'NOVA',
                    'DWARF', 'GIANT', 'CLUSTER', 'SPIRAL', 'ELLIPSE', 'GRAVITY', 'DARK', 'MATTER', 'ENERGY', 'PHOTON',
                    'NEUTRON', 'PROTON', 'ELECTRON', 'QUANTUM', 'SPACE', 'TIME', 'DIMENSION', 'PARALLEL', 'ANTIMATTER', 'SINGULARITY',
                    'HORIZON', 'RADIATION', 'GAMMA', 'XRAY', 'INFRARED', 'ULTRAVIOLET', 'SPECTRUM', 'LIGHT', 'VELOCITY', 'RELATIVITY'],
+            
             food: ['PIZZA', 'BURGER', 'SUSHI', 'PASTA', 'TACO', 'SALAD', 'STEAK', 'CURRY', 'RAMEN', 'BREAD',
                   'SANDWICH', 'BURRITO', 'QUESADILLA', 'ENCHILADA', 'NACHOS', 'FAJITA', 'TAMALE', 'EMPANADA', 'AREPA', 'TORTILLA',
                   'LASAGNA', 'RAVIOLI', 'GNOCCHI', 'RISOTTO', 'POLENTA', 'FOCACCIA', 'PANINI', 'BRUSCHETTA', 'TIRAMISU', 'GELATO',
                   'TEMPURA', 'TERIYAKI', 'YAKITORI', 'UDON', 'SOBA', 'MISO', 'EDAMAME', 'TOFU', 'KIMCHI', 'BIBIMBAP',
                   'POUTINE', 'CROISSANT', 'BAGUETTE', 'CREPE', 'SOUFFLE', 'QUICHE', 'RATATOUILLE', 'BOUILLABAISSE', 'COUSCOUS', 'FALAFEL',
                   'HUMMUS', 'KEBAB', 'SHAWARMA', 'PAELLA', 'GAZPACHO', 'CHURRO', 'PIEROGI', 'GOULASH', 'SCHNITZEL', 'PRETZEL'],
+            
             sports: ['SOCCER', 'TENNIS', 'HOCKEY', 'CRICKET', 'RUGBY', 'BOXING', 'GOLF', 'SURFING', 'SKIING', 'DIVING',
                     'BASKETBALL', 'BASEBALL', 'FOOTBALL', 'VOLLEYBALL', 'HANDBALL', 'SOFTBALL', 'LACROSSE', 'POLO', 'SQUASH', 'BADMINTON',
                     'SWIMMING', 'CYCLING', 'RUNNING', 'MARATHON', 'SPRINT', 'HURDLES', 'RELAY', 'JAVELIN', 'DISCUS', 'SHOTPUT',
-                    'HAMMER', 'VAULT', 'HIGHUMP', 'LONGJUMP', 'TRIPLE', 'ARCHERY', 'FENCING', 'JUDO', 'KARATE', 'TAEKWONDO',
+                    'HAMMER', 'VAULT', 'HIGHJUMP', 'LONGJUMP', 'TRIPLE', 'ARCHERY', 'FENCING', 'JUDO', 'KARATE', 'TAEKWONDO',
                     'WRESTLING', 'SUMO', 'KICKBOXING', 'MUAYTHAI', 'ROWING', 'KAYAKING', 'CANOEING', 'SAILING', 'WINDSURFING', 'KITESURFING',
                     'SKATEBOARD', 'SNOWBOARD', 'BOBSLED', 'LUGE', 'SKELETON', 'CURLING', 'BIATHLON', 'TRIATHLON', 'DECATHLON', 'PENTATHLON'],
+            
             nature: ['MOUNTAIN', 'OCEAN', 'RIVER', 'LAKE', 'FOREST', 'DESERT', 'JUNGLE', 'VALLEY', 'CANYON', 'CLIFF',
                     'WATERFALL', 'GLACIER', 'VOLCANO', 'ISLAND', 'PENINSULA', 'PLATEAU', 'PRAIRIE', 'TUNDRA', 'SAVANNA', 'MARSH',
                     'SWAMP', 'BAYOU', 'LAGOON', 'REEF', 'ATOLL', 'FJORD', 'DELTA', 'ESTUARY', 'BEACH', 'COAST',
                     'SHORE', 'DUNE', 'OASIS', 'GEYSER', 'SPRING', 'CAVERN', 'GROTTO', 'MESA', 'BUTTE', 'RIDGE',
                     'PEAK', 'SUMMIT', 'CREST', 'SLOPE', 'MEADOW', 'GLEN', 'GROVE', 'THICKET', 'WOODLAND', 'RAINFOREST',
                     'TAIGA', 'STEPPE', 'WETLAND', 'MANGROVE', 'CORAL', 'KELP', 'SEAWEED', 'ALGAE', 'PLANKTON', 'ANEMONE'],
+            
             music: ['GUITAR', 'PIANO', 'DRUMS', 'VIOLIN', 'TRUMPET', 'SAXOPHONE', 'FLUTE', 'CLARINET', 'OBOE', 'BASSOON',
-                   'TROMBONE', 'TUBA', 'FRENCH', 'CELLO', 'VIOLA', 'BASS', 'HARP', 'BANJO', 'UKULELE', 'MANDOLIN',
+                   'TROMBONE', 'TUBA', 'HORN', 'CELLO', 'VIOLA', 'BASS', 'HARP', 'BANJO', 'UKULELE', 'MANDOLIN',
                    'ACCORDION', 'HARMONICA', 'BAGPIPE', 'ORGAN', 'SYNTH', 'KEYBOARD', 'XYLOPHONE', 'MARIMBA', 'TAMBOURINE', 'CYMBAL',
                    'MELODY', 'HARMONY', 'RHYTHM', 'TEMPO', 'BEAT', 'CHORD', 'NOTE', 'SCALE', 'OCTAVE', 'PITCH',
-                   'TONE', 'TIMBRE', 'DYNAMICS', 'CRESCENDO', 'FORTE', 'PIANO', 'ALLEGRO', 'ADAGIO', 'SYMPHONY', 'CONCERTO',
+                   'TONE', 'TIMBRE', 'DYNAMICS', 'CRESCENDO', 'FORTE', 'ALLEGRO', 'ADAGIO', 'SYMPHONY', 'CONCERTO',
                    'SONATA', 'OPERA', 'ARIA', 'OVERTURE', 'PRELUDE', 'FUGUE', 'ETUDE', 'NOCTURNE', 'WALTZ', 'JAZZ'],
+            
             technology: ['COMPUTER', 'LAPTOP', 'TABLET', 'PHONE', 'KEYBOARD', 'MOUSE', 'MONITOR', 'PRINTER', 'SCANNER', 'ROUTER',
                         'MODEM', 'WIFI', 'BLUETOOTH', 'USB', 'HDMI', 'ETHERNET', 'CABLE', 'CHARGER', 'BATTERY', 'PROCESSOR',
                         'MEMORY', 'STORAGE', 'DRIVE', 'DISK', 'CLOUD', 'SERVER', 'DATABASE', 'SOFTWARE', 'HARDWARE', 'FIRMWARE',
                         'OPERATING', 'SYSTEM', 'PROGRAM', 'APPLICATION', 'BROWSER', 'SEARCH', 'ENGINE', 'WEBSITE', 'EMAIL', 'INTERNET',
                         'NETWORK', 'FIREWALL', 'ANTIVIRUS', 'MALWARE', 'HACKER', 'ENCRYPTION', 'PASSWORD', 'SECURITY', 'PRIVACY', 'BACKUP',
                         'ALGORITHM', 'CODE', 'BINARY', 'DATA', 'DIGITAL', 'ANALOG', 'CIRCUIT', 'CHIP', 'SILICON', 'QUANTUM'],
+            
             movies: ['ACTION', 'COMEDY', 'DRAMA', 'THRILLER', 'HORROR', 'ROMANCE', 'SCIFI', 'FANTASY', 'ADVENTURE', 'MYSTERY',
                     'WESTERN', 'MUSICAL', 'ANIMATION', 'DOCUMENTARY', 'BIOGRAPHY', 'HISTORICAL', 'CRIME', 'NOIR', 'SUPERHERO', 'MONSTER',
                     'DIRECTOR', 'ACTOR', 'ACTRESS', 'PRODUCER', 'WRITER', 'SCREENPLAY', 'SCRIPT', 'DIALOGUE', 'MONOLOGUE', 'SCENE',
-                    'SHOT', 'FRAME', 'CAMERA', 'LIGHTING', 'SOUND', 'MUSIC', 'SCORE', 'SOUNDTRACK', 'EFFECTS', 'SPECIAL',
+                    'SHOT', 'FRAME', 'CAMERA', 'LIGHTING', 'SOUND', 'SCORE', 'SOUNDTRACK', 'EFFECTS', 'SPECIAL',
                     'VISUAL', 'EDITING', 'MONTAGE', 'SEQUENCE', 'OPENING', 'ENDING', 'CREDITS', 'TRAILER', 'PREMIERE', 'OSCAR',
-                    'AWARD', 'FESTIVAL', 'CANNES', 'SUNDANCE', 'VENICE', 'BERLIN', 'TORONTO', 'TRIBECA', 'SCREENPLAY', 'CASTING'],
+                    'AWARD', 'FESTIVAL', 'CANNES', 'SUNDANCE', 'VENICE', 'BERLIN', 'TORONTO', 'TRIBECA', 'CASTING', 'AUDITION'],
+            
             countries: ['AMERICA', 'CANADA', 'MEXICO', 'BRAZIL', 'ARGENTINA', 'CHILE', 'PERU', 'COLOMBIA', 'VENEZUELA', 'ECUADOR',
                        'ENGLAND', 'FRANCE', 'GERMANY', 'ITALY', 'SPAIN', 'PORTUGAL', 'GREECE', 'TURKEY', 'RUSSIA', 'POLAND',
                        'SWEDEN', 'NORWAY', 'DENMARK', 'FINLAND', 'ICELAND', 'IRELAND', 'SCOTLAND', 'WALES', 'BELGIUM', 'NETHERLANDS',
                        'AUSTRIA', 'SWITZERLAND', 'CZECH', 'HUNGARY', 'ROMANIA', 'BULGARIA', 'UKRAINE', 'CROATIA', 'SERBIA', 'ALBANIA',
                        'CHINA', 'JAPAN', 'KOREA', 'INDIA', 'THAILAND', 'VIETNAM', 'MALAYSIA', 'INDONESIA', 'PHILIPPINES', 'SINGAPORE',
-                       'AUSTRALIA', 'ZEALAND', 'FIJI', 'SAMOA', 'TONGA', 'EGYPT', 'MOROCCO', 'KENYA', 'ETHIOPIA', 'NIGERIA']
+                       'AUSTRALIA', 'ZEALAND', 'FIJI', 'SAMOA', 'TONGA', 'EGYPT', 'MOROCCO', 'KENYA', 'ETHIOPIA', 'NIGERIA'],
+            
+            // 20 NEW CATEGORIES
+            occupations: ['DOCTOR', 'TEACHER', 'ENGINEER', 'NURSE', 'LAWYER', 'CHEF', 'PILOT', 'ARCHITECT', 'DENTIST', 'FARMER',
+                         'SCIENTIST', 'ARTIST', 'MUSICIAN', 'WRITER', 'JOURNALIST', 'PHOTOGRAPHER', 'DESIGNER', 'PROGRAMMER', 'MECHANIC', 'PLUMBER',
+                         'ELECTRICIAN', 'CARPENTER', 'MASON', 'WELDER', 'PAINTER', 'DRIVER', 'CAPTAIN', 'ADMIRAL', 'GENERAL', 'SERGEANT',
+                         'DETECTIVE', 'OFFICER', 'FIREFIGHTER', 'PARAMEDIC', 'THERAPIST', 'COUNSELOR', 'PSYCHOLOGIST', 'PHARMACIST', 'SURGEON', 'CARDIOLOGIST',
+                         'PEDIATRICIAN', 'VETERINARIAN', 'LIBRARIAN', 'PROFESSOR', 'PRINCIPAL', 'COACH', 'TRAINER', 'ATHLETE', 'ACTOR', 'DANCER',
+                         'SINGER', 'COMPOSER', 'CONDUCTOR', 'SCULPTOR', 'POTTER', 'JEWELER', 'TAILOR', 'BARBER', 'STYLIST', 'FLORIST'],
+            
+            weather: ['RAIN', 'SNOW', 'SLEET', 'HAIL', 'THUNDER', 'LIGHTNING', 'TORNADO', 'HURRICANE', 'TYPHOON', 'CYCLONE',
+                     'BLIZZARD', 'STORM', 'TEMPEST', 'SQUALL', 'GALE', 'WIND', 'BREEZE', 'GUST', 'DRAFT', 'WHIRLWIND',
+                     'CLOUDY', 'OVERCAST', 'FOGGY', 'MISTY', 'HAZY', 'SUNNY', 'BRIGHT', 'CLEAR', 'FAIR', 'MILD',
+                     'WARM', 'HOT', 'SCORCHING', 'SWELTERING', 'HUMID', 'MUGGY', 'STICKY', 'COLD', 'FREEZING', 'FRIGID',
+                     'CHILLY', 'COOL', 'CRISP', 'FROST', 'ICE', 'ICICLE', 'DRIZZLE', 'SHOWER', 'DOWNPOUR', 'DELUGE',
+                     'RAINBOW', 'SUNSHINE', 'SHADOW', 'TWILIGHT', 'DAWN', 'DUSK', 'SUNSET', 'SUNRISE', 'MOONLIGHT', 'STARLIGHT'],
+            
+            emotions: ['HAPPY', 'SAD', 'ANGRY', 'EXCITED', 'CALM', 'ANXIOUS', 'NERVOUS', 'WORRIED', 'SCARED', 'AFRAID',
+                      'BRAVE', 'CONFIDENT', 'PROUD', 'ASHAMED', 'GUILTY', 'RELIEVED', 'GRATEFUL', 'THANKFUL', 'HOPEFUL', 'OPTIMISTIC',
+                      'PESSIMISTIC', 'JOYFUL', 'CHEERFUL', 'DELIGHTED', 'THRILLED', 'ECSTATIC', 'ELATED', 'GLEEFUL', 'CONTENT', 'SATISFIED',
+                      'PEACEFUL', 'SERENE', 'TRANQUIL', 'RELAXED', 'MELLOW', 'UPSET', 'DISTRESSED', 'TROUBLED', 'DISTRAUGHT', 'DEVASTATED',
+                      'HEARTBROKEN', 'LONELY', 'ISOLATED', 'REJECTED', 'HURT', 'OFFENDED', 'INSULTED', 'HUMILIATED', 'EMBARRASSED', 'SHY',
+                      'TIMID', 'BOLD', 'DARING', 'ADVENTUROUS', 'CURIOUS', 'INTERESTED', 'FASCINATED', 'AMAZED', 'ASTONISHED', 'SURPRISED'],
+            
+            transportation: ['CAR', 'TRUCK', 'BUS', 'TRAIN', 'SUBWAY', 'TRAM', 'TROLLEY', 'BICYCLE', 'MOTORCYCLE', 'SCOOTER',
+                            'AIRPLANE', 'JET', 'HELICOPTER', 'GLIDER', 'BLIMP', 'BALLOON', 'ROCKET', 'SHUTTLE', 'SPACECRAFT', 'CAPSULE',
+                            'BOAT', 'SHIP', 'YACHT', 'FERRY', 'CRUISE', 'SAILBOAT', 'CANOE', 'KAYAK', 'RAFT', 'GONDOLA',
+                            'SUBMARINE', 'VESSEL', 'TANKER', 'FREIGHTER', 'CARRIER', 'DESTROYER', 'BATTLESHIP', 'CRUISER', 'FRIGATE', 'CORVETTE',
+                            'WAGON', 'CARRIAGE', 'CHARIOT', 'CART', 'SLED', 'SLEIGH', 'RICKSHAW', 'TAXI', 'LIMOUSINE', 'SEDAN',
+                            'COUPE', 'CONVERTIBLE', 'MINIVAN', 'PICKUP', 'TRAILER', 'TRACTOR', 'BULLDOZER', 'CRANE', 'FORKLIFT', 'EXCAVATOR'],
+            
+            bodyparts: ['HEAD', 'BRAIN', 'SKULL', 'FACE', 'FOREHEAD', 'EYE', 'EYEBROW', 'EYELASH', 'NOSE', 'NOSTRIL',
+                       'CHEEK', 'EAR', 'JAW', 'CHIN', 'MOUTH', 'LIP', 'TONGUE', 'TOOTH', 'GUMS', 'THROAT',
+                       'NECK', 'SHOULDER', 'COLLARBONE', 'CHEST', 'BREAST', 'RIBS', 'SPINE', 'BACK', 'WAIST', 'ABDOMEN',
+                       'STOMACH', 'BELLY', 'NAVEL', 'HIP', 'PELVIS', 'GROIN', 'BUTTOCK', 'THIGH', 'KNEE', 'KNEECAP',
+                       'SHIN', 'CALF', 'ANKLE', 'FOOT', 'HEEL', 'ARCH', 'SOLE', 'TOE', 'TOENAIL', 'ARM',
+                       'ELBOW', 'FOREARM', 'WRIST', 'HAND', 'PALM', 'FINGER', 'THUMB', 'NAIL', 'KNUCKLE', 'FIST'],
+            
+            buildings: ['HOUSE', 'HOME', 'COTTAGE', 'CABIN', 'MANSION', 'VILLA', 'PALACE', 'CASTLE', 'FORTRESS', 'TOWER',
+                       'SKYSCRAPER', 'APARTMENT', 'CONDO', 'FLAT', 'LOFT', 'PENTHOUSE', 'BUNGALOW', 'DUPLEX', 'RANCH', 'ESTATE',
+                       'CHURCH', 'CATHEDRAL', 'CHAPEL', 'TEMPLE', 'MOSQUE', 'SYNAGOGUE', 'SHRINE', 'MONASTERY', 'ABBEY', 'BASILICA',
+                       'MUSEUM', 'GALLERY', 'LIBRARY', 'THEATER', 'CINEMA', 'STADIUM', 'ARENA', 'COLISEUM', 'AMPHITHEATER', 'PAVILION',
+                       'SCHOOL', 'COLLEGE', 'UNIVERSITY', 'ACADEMY', 'INSTITUTE', 'HOSPITAL', 'CLINIC', 'INFIRMARY', 'DISPENSARY', 'PHARMACY',
+                       'HOTEL', 'MOTEL', 'INN', 'HOSTEL', 'RESORT', 'LODGE', 'TAVERN', 'BAR', 'RESTAURANT', 'CAFE'],
+            
+            holidays: ['CHRISTMAS', 'EASTER', 'HALLOWEEN', 'THANKSGIVING', 'NEWYEAR', 'VALENTINE', 'PATRICK', 'INDEPENDENCE', 'MEMORIAL', 'LABOR',
+                      'HANUKKAH', 'KWANZAA', 'DIWALI', 'RAMADAN', 'PASSOVER', 'YOMKIPPUR', 'ROSHHASHANAH', 'SUKKOT', 'PURIM', 'SHAVUOT',
+                      'BIRTHDAY', 'ANNIVERSARY', 'WEDDING', 'GRADUATION', 'RETIREMENT', 'BAPTISM', 'CONFIRMATION', 'COMMUNION', 'MITZVAH', 'QUINCEAÑERA',
+                      'CARNIVAL', 'MARDI', 'FIESTA', 'FESTIVAL', 'CELEBRATION', 'PARADE', 'FIREWORKS', 'PARTY', 'GATHERING', 'REUNION',
+                      'SPRING', 'SUMMER', 'AUTUMN', 'WINTER', 'SOLSTICE', 'EQUINOX', 'HARVEST', 'MAYDAY', 'BOXING', 'EPIPHANY',
+                      'ASCENSION', 'PENTECOST', 'ADVENT', 'LENT', 'TRINITY', 'ASSUMPTION', 'IMMACULATE', 'SAINTS', 'SOULS', 'CORPUS'],
+            
+            mythology: ['ZEUS', 'HERA', 'POSEIDON', 'HADES', 'ATHENA', 'APOLLO', 'ARTEMIS', 'ARES', 'APHRODITE', 'HERMES',
+                       'HEPHAESTUS', 'DIONYSUS', 'DEMETER', 'HESTIA', 'PERSEPHONE', 'HERCULES', 'PERSEUS', 'THESEUS', 'JASON', 'ACHILLES',
+                       'ODYSSEUS', 'ORPHEUS', 'ATLAS', 'PROMETHEUS', 'PANDORA', 'MEDUSA', 'MINOTAUR', 'CENTAUR', 'CYCLOPS', 'SIREN',
+                       'SPHINX', 'PHOENIX', 'DRAGON', 'GRIFFIN', 'PEGASUS', 'UNICORN', 'HYDRA', 'CHIMERA', 'CERBERUS', 'KRAKEN',
+                       'ODIN', 'THOR', 'LOKI', 'FREYA', 'FRIGG', 'BALDUR', 'TYR', 'HEIMDALL', 'VALKYRIE', 'FENRIR',
+                       'JORMUNGANDR', 'SLEIPNIR', 'YGGDRASIL', 'VALHALLA', 'ASGARD', 'MIDGARD', 'RAGNAROK', 'RUNE', 'DWARF', 'ELF'],
+            
+            gemstones: ['DIAMOND', 'RUBY', 'SAPPHIRE', 'EMERALD', 'PEARL', 'OPAL', 'TOPAZ', 'AMETHYST', 'GARNET', 'TURQUOISE',
+                       'JADE', 'ONYX', 'AGATE', 'JASPER', 'QUARTZ', 'CRYSTAL', 'CITRINE', 'PERIDOT', 'AQUAMARINE', 'BERYL',
+                       'TOURMALINE', 'ZIRCON', 'SPINEL', 'ALEXANDRITE', 'TANZANITE', 'KUNZITE', 'MORGANITE', 'IOLITE', 'CHRYSOBERYL', 'MOONSTONE',
+                       'SUNSTONE', 'LABRADORITE', 'AMAZONITE', 'AVENTURINE', 'CARNELIAN', 'CHALCEDONY', 'CHRYSOPRASE', 'HEMATITE', 'LAPIS', 'LAZULI',
+                       'MALACHITE', 'OBSIDIAN', 'RHODONITE', 'SODALITE', 'TIGEREYE', 'BLOODSTONE', 'FLUORITE', 'PYRITE', 'SELENITE', 'CALCITE',
+                       'AZURITE', 'CHRYSOCOLLA', 'DIOPTASE', 'LARIMAR', 'LEPIDOLITE', 'PREHNITE', 'SERAPHINITE', 'SUGILITE', 'UNAKITE', 'VARISCITE'],
+            
+            flowers: ['ROSE', 'TULIP', 'DAISY', 'LILY', 'ORCHID', 'SUNFLOWER', 'DAFFODIL', 'IRIS', 'CARNATION', 'PEONY',
+                     'DAHLIA', 'CHRYSANTHEMUM', 'MARIGOLD', 'ZINNIA', 'ASTER', 'COSMOS', 'POPPY', 'PANSY', 'VIOLA', 'PETUNIA',
+                     'BEGONIA', 'IMPATIENS', 'GERANIUM', 'HIBISCUS', 'AZALEA', 'RHODODENDRON', 'CAMELLIA', 'GARDENIA', 'MAGNOLIA', 'JASMINE',
+                     'LAVENDER', 'LILAC', 'WISTERIA', 'HONEYSUCKLE', 'CLEMATIS', 'MORNING', 'SWEET', 'NASTURTIUM', 'SNAPDRAGON', 'FOXGLOVE',
+                     'DELPHINIUM', 'LARKSPUR', 'LUPINE', 'HOLLYHOCK', 'BLEEDING', 'COLUMBINE', 'PRIMROSE', 'ANEMONE', 'BUTTERCUP', 'RANUNCULUS',
+                     'CALLA', 'FREESIA', 'GLADIOLUS', 'HYACINTH', 'NARCISSUS', 'CROCUS', 'SNOWDROP', 'BLUEBELL', 'AMARYLLIS', 'CANNA'],
+            
+            trees: ['OAK', 'PINE', 'MAPLE', 'BIRCH', 'WILLOW', 'ELM', 'ASH', 'BEECH', 'CEDAR', 'FIR',
+                   'SPRUCE', 'HEMLOCK', 'CYPRESS', 'REDWOOD', 'SEQUOIA', 'JUNIPER', 'YEW', 'LARCH', 'POPLAR', 'ASPEN',
+                   'COTTONWOOD', 'SYCAMORE', 'PLANE', 'WALNUT', 'HICKORY', 'PECAN', 'CHESTNUT', 'BUCKEYE', 'LINDEN', 'BASSWOOD',
+                   'MAGNOLIA', 'DOGWOOD', 'REDBUD', 'CHERRY', 'PLUM', 'PEACH', 'APPLE', 'PEAR', 'CRABAPPLE', 'HAWTHORN',
+                   'ROWAN', 'ELDER', 'HOLLY', 'LAUREL', 'BAY', 'OLIVE', 'FIG', 'MULBERRY', 'PERSIMMON', 'PAWPAW',
+                   'SASSAFRAS', 'SWEETGUM', 'TULIPTREE', 'CATALPA', 'LOCUST', 'ACACIA', 'MIMOSA', 'MESQUITE', 'IRONWOOD', 'HORNBEAM'],
+            
+            oceanlife: ['WHALE', 'DOLPHIN', 'SHARK', 'SEAL', 'OTTER', 'WALRUS', 'MANATEE', 'DUGONG', 'PENGUIN', 'ALBATROSS',
+                       'OCTOPUS', 'SQUID', 'CUTTLEFISH', 'NAUTILUS', 'JELLYFISH', 'STARFISH', 'URCHIN', 'CUCUMBER', 'ANEMONE', 'CORAL',
+                       'SPONGE', 'BARNACLE', 'MUSSEL', 'OYSTER', 'CLAM', 'SCALLOP', 'ABALONE', 'CONCH', 'WHELK', 'SNAIL',
+                       'CRAB', 'LOBSTER', 'SHRIMP', 'PRAWN', 'KRILL', 'CRAYFISH', 'HERMIT', 'HORSESHOE', 'TUNA', 'SALMON',
+                       'TROUT', 'BASS', 'GROUPER', 'SNAPPER', 'MACKEREL', 'SARDINE', 'ANCHOVY', 'HERRING', 'HALIBUT', 'FLOUNDER',
+                       'SOLE', 'TURBOT', 'MARLIN', 'SWORDFISH', 'SAILFISH', 'BARRACUDA', 'MORAY', 'SEAHORSE', 'PIPEFISH', 'LIONFISH'],
+            
+            dinosaurs: ['TREX', 'VELOCIRAPTOR', 'STEGOSAURUS', 'TRICERATOPS', 'BRACHIOSAURUS', 'DIPLODOCUS', 'APATOSAURUS', 'BRONTOSAURUS', 'ALLOSAURUS', 'SPINOSAURUS',
+                       'PTERANODON', 'PTERODACTYL', 'ARCHAEOPTERYX', 'ICHTHYOSAUR', 'PLESIOSAURUS', 'MOSASAURUS', 'ANKYLOSAURUS', 'PARASAUROLOPHUS', 'IGUANODON', 'HADROSAUR',
+                       'PACHYCEPHALOSAURUS', 'STYRACOSAURUS', 'PROTOCERATOPS', 'PSITTACOSAURUS', 'CERATOSAURUS', 'CARNOTAURUS', 'DILOPHOSAURUS', 'COMPSOGNATHUS', 'OVIRAPTOR', 'GALLIMIMUS',
+                       'ORNITHOMIMUS', 'DEINONYCHUS', 'UTAHRAPTOR', 'MICRORAPTOR', 'THERIZINOSAURUS', 'GIGANOTOSAURUS', 'CARCHARODONTOSAURUS', 'ACROCANTHOSAURUS', 'SUCHOMIMUS', 'BARYONYX',
+                       'KENTROSAURUS', 'TUOJIANGOSAURUS', 'MAIASAURA', 'CORYTHOSAURUS', 'LAMBEOSAURUS', 'EDMONTOSAURUS', 'ARGENTINOSAURUS', 'SALTASAURUS', 'AMARGASAURUS', 'CAMARASAURUS',
+                       'MAMENCHISAURUS', 'SEISMOSAURUS', 'SUPERSAURUS', 'ULTRASAURUS', 'PLATEOSAURUS', 'MASSOSPONDYLUS', 'COELOPHYSIS', 'HERRERASAURUS', 'EORAPTOR', 'DIMETRODON'],
+            
+            desserts: ['CAKE', 'PIE', 'COOKIE', 'BROWNIE', 'CUPCAKE', 'MUFFIN', 'DONUT', 'PASTRY', 'TART', 'FLAN',
+                      'PUDDING', 'CUSTARD', 'MOUSSE', 'SOUFFLE', 'PARFAIT', 'SUNDAE', 'GELATO', 'SORBET', 'SHERBET', 'ICECREAM',
+                      'TIRAMISU', 'CHEESECAKE', 'ECLAIR', 'PROFITEROLE', 'MACARON', 'MERINGUE', 'PAVLOVA', 'BAKLAVA', 'CANNOLI', 'BISCOTTI',
+                      'CHURRO', 'CREPE', 'WAFFLE', 'PANCAKE', 'SCONE', 'CROISSANT', 'DANISH', 'STRUDEL', 'COBBLER', 'CRISP',
+                      'CRUMBLE', 'TURNOVER', 'FRITTER', 'FUNNEL', 'BEIGNET', 'ZEPPOLE', 'LOUKOUMADES', 'GULAB', 'JALEBI', 'RASGULLA',
+                      'HALVA', 'NOUGAT', 'PRALINE', 'TRUFFLE', 'BONBON', 'FUDGE', 'CARAMEL', 'TOFFEE', 'BRITTLE', 'DIVINITY'],
+            
+            vegetables: ['CARROT', 'BROCCOLI', 'CAULIFLOWER', 'CABBAGE', 'LETTUCE', 'SPINACH', 'KALE', 'CHARD', 'ARUGULA', 'ENDIVE',
+                        'RADICCHIO', 'BRUSSELS', 'ARTICHOKE', 'ASPARAGUS', 'CELERY', 'LEEK', 'ONION', 'GARLIC', 'SHALLOT', 'SCALLION',
+                        'TOMATO', 'PEPPER', 'CHILI', 'JALAPENO', 'HABANERO', 'BELL', 'PIMENTO', 'CUCUMBER', 'ZUCCHINI', 'SQUASH',
+                        'PUMPKIN', 'EGGPLANT', 'OKRA', 'BEAN', 'PEA', 'LENTIL', 'CHICKPEA', 'SOYBEAN', 'EDAMAME', 'CORN',
+                        'POTATO', 'SWEET', 'YAM', 'TURNIP', 'RADISH', 'BEET', 'PARSNIP', 'RUTABAGA', 'KOHLRABI', 'JICAMA',
+                        'GINGER', 'TURMERIC', 'HORSERADISH', 'WASABI', 'MUSHROOM', 'TRUFFLE', 'MOREL', 'CHANTERELLE', 'PORTOBELLO', 'SHIITAKE'],
+            
+            fruits: ['APPLE', 'ORANGE', 'BANANA', 'GRAPE', 'STRAWBERRY', 'BLUEBERRY', 'RASPBERRY', 'BLACKBERRY', 'CRANBERRY', 'CHERRY',
+                    'PEACH', 'PLUM', 'APRICOT', 'NECTARINE', 'PEAR', 'QUINCE', 'PERSIMMON', 'FIG', 'DATE', 'PRUNE',
+                    'PINEAPPLE', 'MANGO', 'PAPAYA', 'GUAVA', 'PASSION', 'DRAGON', 'STAR', 'LYCHEE', 'LONGAN', 'RAMBUTAN',
+                    'KIWI', 'POMEGRANATE', 'COCONUT', 'AVOCADO', 'OLIVE', 'TOMATO', 'WATERMELON', 'CANTALOUPE', 'HONEYDEW', 'CASABA',
+                    'LEMON', 'LIME', 'GRAPEFRUIT', 'TANGERINE', 'CLEMENTINE', 'MANDARIN', 'KUMQUAT', 'POMELO', 'BLOOD', 'TANGELO',
+                    'MULBERRY', 'ELDERBERRY', 'GOOSEBERRY', 'CURRANT', 'ACAI', 'GOJI', 'ACEROLA', 'CAMU', 'FEIJOA', 'JABUTICABA'],
+            
+            insects: ['ANT', 'BEE', 'WASP', 'HORNET', 'FLY', 'MOSQUITO', 'GNAT', 'MOTH', 'BUTTERFLY', 'BEETLE',
+                     'LADYBUG', 'FIREFLY', 'GRASSHOPPER', 'CRICKET', 'LOCUST', 'CICADA', 'KATYDID', 'MANTIS', 'STICK', 'LEAF',
+                     'COCKROACH', 'TERMITE', 'FLEA', 'LOUSE', 'BEDBUG', 'APHID', 'SCALE', 'MEALYBUG', 'WHITEFLY', 'THRIPS',
+                     'DRAGONFLY', 'DAMSELFLY', 'MAYFLY', 'CADDISFLY', 'STONEFLY', 'EARWIG', 'SILVERFISH', 'BRISTLETAIL', 'SPRINGTAIL', 'BOOKWORM',
+                     'WEEVIL', 'BORER', 'GRUB', 'MAGGOT', 'LARVA', 'PUPA', 'CATERPILLAR', 'CHRYSALIS', 'COCOON', 'MONARCH',
+                     'SWALLOWTAIL', 'ADMIRAL', 'FRITILLARY', 'SKIPPER', 'SPHINX', 'LUNA', 'CECROPIA', 'ATLAS', 'HERCULES', 'GOLIATH'],
+            
+            birds: ['EAGLE', 'HAWK', 'FALCON', 'OSPREY', 'KITE', 'CONDOR', 'VULTURE', 'OWL', 'RAVEN', 'CROW',
+                   'JAY', 'MAGPIE', 'FINCH', 'SPARROW', 'CARDINAL', 'ROBIN', 'BLUEBIRD', 'THRUSH', 'WARBLER', 'WREN',
+                   'CHICKADEE', 'TITMOUSE', 'NUTHATCH', 'CREEPER', 'WOODPECKER', 'FLICKER', 'SAPSUCKER', 'KINGFISHER', 'HERON', 'EGRET',
+                   'CRANE', 'STORK', 'IBIS', 'SPOONBILL', 'FLAMINGO', 'PELICAN', 'CORMORANT', 'ANHINGA', 'DUCK', 'GOOSE',
+                   'SWAN', 'LOON', 'GREBE', 'GULL', 'TERN', 'SKIMMER', 'ALBATROSS', 'PETREL', 'SHEARWATER', 'PUFFIN',
+                   'MURRE', 'GUILLEMOT', 'RAZORBILL', 'AUK', 'PIGEON', 'DOVE', 'PARROT', 'MACAW', 'COCKATOO', 'PARAKEET'],
+            
+            tools: ['HAMMER', 'SCREWDRIVER', 'WRENCH', 'PLIERS', 'SAW', 'DRILL', 'CHISEL', 'FILE', 'RASP', 'PLANE',
+                   'LEVEL', 'SQUARE', 'RULER', 'MEASURE', 'CALIPER', 'COMPASS', 'PROTRACTOR', 'DIVIDER', 'SCRIBE', 'PUNCH',
+                   'AWL', 'KNIFE', 'BLADE', 'CUTTER', 'SCISSORS', 'SHEARS', 'SNIPS', 'CLAMP', 'VISE', 'ANVIL',
+                   'MALLET', 'SLEDGE', 'PICKAXE', 'MATTOCK', 'HOE', 'RAKE', 'SHOVEL', 'SPADE', 'TROWEL', 'FORK',
+                   'SICKLE', 'SCYTHE', 'PRUNER', 'LOPPER', 'SHEAR', 'CLIPPER', 'TRIMMER', 'EDGER', 'MOWER', 'BLOWER',
+                   'SPRAYER', 'SPREADER', 'ROLLER', 'BRUSH', 'SCRAPER', 'PUTTY', 'FLOAT', 'GROOVER', 'EDGER', 'TAMPER'],
+            
+            clothing: ['SHIRT', 'BLOUSE', 'SWEATER', 'CARDIGAN', 'JACKET', 'COAT', 'BLAZER', 'VEST', 'PANTS', 'TROUSERS',
+                      'JEANS', 'SHORTS', 'SKIRT', 'DRESS', 'GOWN', 'ROBE', 'KIMONO', 'SARI', 'KILT', 'TOGA',
+                      'TUNIC', 'PONCHO', 'CAPE', 'CLOAK', 'SHAWL', 'SCARF', 'TIE', 'BOWTIE', 'CRAVAT', 'ASCOT',
+                      'HAT', 'CAP', 'BERET', 'FEDORA', 'BOWLER', 'DERBY', 'SOMBRERO', 'TURBAN', 'FEZ', 'BALACLAVA',
+                      'GLOVES', 'MITTENS', 'SOCKS', 'STOCKINGS', 'TIGHTS', 'LEGGINGS', 'SHOES', 'BOOTS', 'SANDALS', 'SLIPPERS',
+                      'SNEAKERS', 'LOAFERS', 'OXFORDS', 'BROGUES', 'PUMPS', 'HEELS', 'WEDGES', 'MOCCASINS', 'ESPADRILLES', 'CLOGS'],
+            
+            toys: ['DOLL', 'TEDDY', 'PUPPET', 'MARIONETTE', 'ACTION', 'FIGURE', 'ROBOT', 'CAR', 'TRUCK', 'TRAIN',
+                  'AIRPLANE', 'BOAT', 'BLOCKS', 'LEGO', 'PUZZLE', 'BOARD', 'CARD', 'DICE', 'CHESS', 'CHECKERS',
+                  'BACKGAMMON', 'DOMINOS', 'MAHJONG', 'MONOPOLY', 'SCRABBLE', 'CLUE', 'RISK', 'SORRY', 'YAHTZEE', 'JENGA',
+                  'BALL', 'BASKETBALL', 'FOOTBALL', 'BASEBALL', 'SOCCER', 'TENNIS', 'VOLLEYBALL', 'FRISBEE', 'KITE', 'YOYO',
+                  'HOOP', 'JUMP', 'SKIP', 'MARBLES', 'JACKS', 'HOPSCOTCH', 'TAG', 'HIDE', 'SEEK', 'SIMON',
+                  'TWISTER', 'OPERATION', 'MOUSETRAP', 'BATTLESHIP', 'CONNECT', 'CANDYLAND', 'CHUTES', 'LADDERS', 'UNO', 'PHASE']
         };
 
         // Direction vectors based on difficulty
@@ -961,14 +1195,8 @@
             document.getElementById('generateBtn').addEventListener('click', generatePuzzle);
             document.getElementById('printBtn').addEventListener('click', () => window.print());
 
-            // Preset buttons
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const preset = btn.dataset.preset;
-                    document.getElementById('wordInput').value = getRandomWords(presets[preset]).join('\n');
-                    generatePuzzle();
-                });
-            });
+            // Theme dropdown (replaced preset buttons)
+            // Handled by inline onchange="loadTheme()" in HTML
 
             // Difficulty buttons
             document.querySelectorAll('.difficulty-btn').forEach(btn => {
@@ -1491,6 +1719,20 @@
             };
             reader.readAsText(file);
             input.value = '';
+        }
+
+        // Theme loading functions
+        function loadTheme(themeName) {
+            if (!themeName || !presets[themeName]) return;
+            document.getElementById('wordInput').value = getRandomWords(presets[themeName]).join('\n');
+            generatePuzzle();
+        }
+
+        function loadRandomTheme() {
+            const themeNames = Object.keys(presets);
+            const randomTheme = themeNames[Math.floor(Math.random() * themeNames.length)];
+            document.getElementById('themeSelector').value = randomTheme;
+            loadTheme(randomTheme);
         }
 
         function showSettings() {
