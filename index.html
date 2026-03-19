@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReaganWords v2.0.0</title>
+    <title>ReaganWords v2.1.0</title>
     
     <!-- App Icons -->
     <link rel="apple-touch-icon" href="RW-Icon-v2.png">
@@ -660,6 +660,14 @@
         <div class="modal-content wide">
             <h2>📋 Changelog</h2>
             <div class="changelog">
+                <h3>Version 2.1.0 <span class="date">(March 2026)</span></h3>
+                <ul>
+                    <li><span class="type-feature">✨ Feature:</span> Stats now sync to cloud!</li>
+                    <li><span class="type-feature">✨ Feature:</span> Your completion times, best time, and puzzle count now follow you across all devices</li>
+                    <li><span class="type-feature">✨ Feature:</span> Auto-syncs stats after each puzzle completion</li>
+                    <li><span class="type-change">📝 Change:</span> Updated database to include puzzle_stats column</li>
+                </ul>
+
                 <h3>Version 2.0.0 <span class="date">(February 2026)</span></h3>
                 <ul>
                     <li><span class="type-feature">✨ Feature:</span> Expanded from 10 to 30 categories!</li>
@@ -749,7 +757,7 @@
     <div class="container">
         <header>
             <h1>ReaganWords</h1>
-            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v2.0.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
+            <p class="subtitle">Unlimited Puzzle Generator <span style="opacity: 0.5;">• v2.1.0</span> <a href="#" onclick="showChangelog(); return false;" style="color: var(--accent-cyan); text-decoration: none; margin-left: 1rem;">📋 Changelog</a></p>
         </header>
 
         <div class="main-content">
@@ -1575,6 +1583,9 @@
             
             localStorage.setItem(key, JSON.stringify(stats));
             updateStatsDisplay();
+            
+            // Auto-sync stats to cloud after completion
+            syncToCloud();
         }
 
         function updateStatsDisplay() {
@@ -1635,6 +1646,11 @@
             if (!userName) return;
 
             const customWords = document.getElementById('wordInput').value;
+            
+            // Get stats from localStorage
+            const statsKey = `${userName}_puzzleStats`;
+            const statsJson = localStorage.getItem(statsKey);
+            const stats = statsJson ? JSON.parse(statsJson) : {times: [], completed: 0};
 
             try {
                 const { data, error } = await supabaseClient
@@ -1642,6 +1658,7 @@
                     .upsert({
                         user_name: userName,
                         custom_words: customWords,
+                        puzzle_stats: stats,
                         last_updated: new Date().toISOString()
                     }, {
                         onConflict: 'user_name'
@@ -1671,7 +1688,16 @@
                 if (error && error.code !== 'PGRST116') throw error;
 
                 if (data) {
+                    // Load custom words
                     document.getElementById('wordInput').value = data.custom_words || '';
+                    
+                    // Load stats if they exist
+                    if (data.puzzle_stats) {
+                        const statsKey = `${userName}_puzzleStats`;
+                        localStorage.setItem(statsKey, JSON.stringify(data.puzzle_stats));
+                        updateStatsDisplay();
+                    }
+                    
                     showMessage('✅ Loaded from cloud!', 'success');
                 } else {
                     showMessage('No cloud data found. Your data will be saved when you sync.', '');
